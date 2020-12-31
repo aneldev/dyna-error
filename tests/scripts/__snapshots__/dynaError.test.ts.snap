@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dynaError Minimal use, just with a message 1`] = `[Error: Something is invalid]`;
+
+exports[`dynaError Use with all properties 1`] = `[Error: Something is invalid]`;
+
+exports[`dynaError Use with all properties: The error 1`] = `[Error: Something is invalid]`;
