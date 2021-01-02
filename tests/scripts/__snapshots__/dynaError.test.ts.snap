@@ -2,4 +2,4 @@
 
 exports[`dynaError Minimal use, just with a message 1`] = `[Error: Something is invalid]`;
 
-exports[`dynaError Use with all properties 1`] = `[Error: Something is invalid]`;
+exports[`dynaError Use with all properties 1`] = `[Error: 330010 Something is invalid]`;

@@ -28,7 +28,7 @@ export const dynaError = (
     canRetry,
   }: IErrorConfig,
 ): IDynaError => {
-  const error: IDynaError = new Error(message) as any;
+  const error: IDynaError = new Error(`${code === undefined ? '' : `${code} `}${message}`) as any;
   error.date = new Date();
   error.userMessage = userMessage;
   error.code = code;
