@@ -1,7 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dynaError = void 0;
-var dynaError = function (_a) {
+var dynaError = function (messageOrErrorConfig) {
+    return typeof messageOrErrorConfig === "string"
+        ? dynaErrorByString(messageOrErrorConfig)
+        : dynaErrorByObject(messageOrErrorConfig);
+};
+exports.dynaError = dynaError;
+var dynaErrorByString = function (message) {
+    return dynaErrorByObject({ message: message });
+};
+var dynaErrorByObject = function (_a) {
     var message = _a.message, userMessage = _a.userMessage, code = _a.code, status = _a.status, data = _a.data, canRetry = _a.canRetry;
     var error = new Error("" + (code === undefined ? '' : code + " ") + message);
     error.date = new Date();
@@ -13,5 +22,4 @@ var dynaError = function (_a) {
     error.isDynaError = true;
     return error;
 };
-exports.dynaError = dynaError;
 //# sourceMappingURL=dynaError.js.map

@@ -16,4 +16,4 @@ export interface IDynaError extends Error {
     canRetry?: boolean;
     isDynaError: true;
 }
-export declare const dynaError: ({ message, userMessage, code, status, data, canRetry, }: IErrorConfig) => IDynaError;
+export declare const dynaError: (messageOrErrorConfig: string | IErrorConfig) => IDynaError;
