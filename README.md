@@ -31,6 +31,10 @@ throw dynaError('Service not available');
 ```
 or this
 ```
+throwDynaError('Service not available');
+```
+or this
+```
 throw dynaError({message: 'Service not available'});
 ```
 where is the same.
