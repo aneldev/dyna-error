@@ -18,7 +18,17 @@ export interface IDynaError extends Error {
   isDynaError: true;
 }
 
-export const dynaError = (
+export const dynaError = (messageOrErrorConfig: string | IErrorConfig): IDynaError => {
+  return typeof messageOrErrorConfig === "string"
+    ? dynaErrorByString(messageOrErrorConfig)
+    : dynaErrorByObject(messageOrErrorConfig);
+};
+
+const dynaErrorByString = (message: string): IDynaError => {
+  return dynaErrorByObject({message});
+};
+
+const dynaErrorByObject = (
   {
     message,
     userMessage,

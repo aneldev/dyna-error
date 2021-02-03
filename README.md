@@ -27,9 +27,15 @@ throw new Error ('Service not available');
 ```
 do this
 ```
+throw dynaError('Service not available');
+```
+or this
+```
 throw dynaError({message: 'Service not available'});
 ```
-add some more info about this error
+where is the same.
+
+Now add some more info about this error
 
 ```
 throw dynaError({
@@ -76,9 +82,9 @@ try {
 
 ## dynaError arg object
 
-`dynaError` expects an object of the IErrorConfig interface.
+`dynaError` expects a string to be the message of the error **or** an object of the `IErrorConfig` interface.
 
-Only the `message` is required.
+From the `IErrorConfig`, only the `message` is required.
 
 ```
 IErrorConfig {
