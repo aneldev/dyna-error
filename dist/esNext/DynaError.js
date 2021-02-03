@@ -1,3 +1,6 @@
+export var throwDynaError = function (messageOrErrorConfig) {
+    throw dynaError(messageOrErrorConfig);
+};
 export var dynaError = function (messageOrErrorConfig) {
     return typeof messageOrErrorConfig === "string"
         ? dynaErrorByString(messageOrErrorConfig)

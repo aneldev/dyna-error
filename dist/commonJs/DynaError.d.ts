@@ -16,4 +16,5 @@ export interface IDynaError extends Error {
     canRetry?: boolean;
     isDynaError: true;
 }
+export declare const throwDynaError: (messageOrErrorConfig: string | IErrorConfig) => void;
 export declare const dynaError: (messageOrErrorConfig: string | IErrorConfig) => IDynaError;

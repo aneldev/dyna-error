@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dynaError = void 0;
+exports.dynaError = exports.throwDynaError = void 0;
+var throwDynaError = function (messageOrErrorConfig) {
+    throw exports.dynaError(messageOrErrorConfig);
+};
+exports.throwDynaError = throwDynaError;
 var dynaError = function (messageOrErrorConfig) {
     return typeof messageOrErrorConfig === "string"
         ? dynaErrorByString(messageOrErrorConfig)
