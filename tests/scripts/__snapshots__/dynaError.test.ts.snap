@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`dynaError throwDynaError Use with all properties 1`] = `[Error: 330010 Something is invalid]`;
-
 exports[`dynaError with error config Minimal use, just with a message 1`] = `[Error: Something is invalid]`;
 
 exports[`dynaError with error config Use with all properties 1`] = `[Error: 330010 Something is invalid]`;

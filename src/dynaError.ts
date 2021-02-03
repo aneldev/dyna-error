@@ -22,10 +22,6 @@ export interface IDynaError extends Error {
   isDynaError: true;
 }
 
-export const throwDynaError = (messageOrErrorConfig: string | IErrorConfig): void => {
-  throw dynaError(messageOrErrorConfig);
-};
-
 export const dynaError = (messageOrErrorConfig: string | IErrorConfig): IDynaError => {
   return typeof messageOrErrorConfig === "string"
     ? dynaErrorByString(messageOrErrorConfig)
