@@ -4,6 +4,8 @@ export interface IErrorConfig {
   code?: number;          // Developer error code, any number to identify the point where the error occurred.
   status?: number;        // Network error status, http code or any status that other parts of the app can understand.
   data?: any;             // Error data for debugging.
+  parentError?: any;      // Parent error
+  validationErrors?: any; // Validation errors
   canRetry?: boolean;     // If the action that caused this error can be retried.
 }
 
@@ -14,6 +16,8 @@ export interface IDynaError extends Error {
   code?: number;
   status?: number;
   data?: any;
+  parentError?: any;
+  validationErrors?: any;
   canRetry?: boolean;
   isDynaError: true;
 }
@@ -39,6 +43,8 @@ const dynaErrorByObject = (
     code,
     status,
     data,
+    parentError,
+    validationErrors,
     canRetry,
   }: IErrorConfig,
 ): IDynaError => {
@@ -48,6 +54,8 @@ const dynaErrorByObject = (
   error.code = code;
   error.status = status;
   error.data = data;
+  error.parentError = parentError;
+  error.validationErrors = validationErrors;
   error.canRetry = canRetry;
   error.isDynaError = true;
   return error;

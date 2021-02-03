@@ -91,12 +91,14 @@ try {
 From the `IErrorConfig`, only the `message` is required.
 
 ```
-IErrorConfig {
+export interface IErrorConfig {
   message: string;        // Error message for debugging.
-  userMessage?: string;   // Error message for the end-user (ideally translated and without sensitive info).
+  userMessage?: string;   // Error message for the end user (ideally translated and without sensitive info).
   code?: number;          // Developer error code, any number to identify the point where the error occurred.
-  status?: number;        // Network error status, HTTP code, or any status that other parts of the app can understand.
+  status?: number;        // Network error status, http code or any status that other parts of the app can understand.
   data?: any;             // Error data for debugging.
+  parentError?: any;      // Parent error
+  validationErrors?: any; // Validation errors
   canRetry?: boolean;     // If the action that caused this error can be retried.
 }
 
@@ -110,6 +112,8 @@ throw dynaError({
   userMessage: 'Please retry',
   code: 330010,
   status: 200,
+  parentError: e,
+  validationErrors: { loginName: 'Is required' },
   canRetry: true,
   data: {
     userId: 230130042,
@@ -130,6 +134,8 @@ interface IDynaError extends Error {
   code?: number;            // What you applied on `dynaError`
   status?: number;          // What you applied on `dynaError`
   data?: any;               // What you applied on `dynaError`
+  parentError?: any;        // What you applied on `dynaError`
+  validationErrors?: any;   // What you applied on `dynaError`
   canRetry?: boolean;       // What you applied on `dynaError`
   isDynaError: true;        // Informative, just gives the info if you used the `dynaError` for this error
 }

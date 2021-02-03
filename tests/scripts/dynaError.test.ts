@@ -19,6 +19,8 @@ describe('dynaError', () => {
         expect(error.code).toBe(undefined);
         expect(error.status).toBe(undefined);
         expect(error.data).toBe(undefined);
+        expect(error.parentError).toBe(undefined);
+        expect(error.validationErrors).toBe(undefined);
         expect(error.canRetry).toBe(undefined);
       }
     });
@@ -30,6 +32,8 @@ describe('dynaError', () => {
           code: 330010,
           status: 500,
           canRetry: false,
+          parentError: {message: 'Parent error'},
+          validationErrors: {name: 'Is required'},
           data: {
             userId: 230130042,
           },
@@ -41,6 +45,8 @@ describe('dynaError', () => {
         expect(error.isDynaError).toBe(true);
         expect(error.date).not.toBe(undefined);
         expect(error.date.valueOf()).toBeGreaterThan(0);
+        expect(error.parentError.message).toBe('Parent error');
+        expect(error.validationErrors?.name).toBe('Is required');
         expect(error.message).toBe('330010 Something is invalid');
         expect(error.userMessage).toBe('Please retry');
         expect(error.code).toBe(330010);
