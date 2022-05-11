@@ -92,7 +92,8 @@ export interface IErrorConfig {
   userMessage?: string;   // Error message for the end user (ideally translated and without sensitive info).
   code?: number;          // Developer error code, any number to identify the point where the error occurred.
   status?: number;        // Network error status, http code or any status that other parts of the app can understand.
-  data?: any;             // Error data for debugging.
+  data?: any;             // Error data for debugging (might contain sensitive info).
+  userData?: any;         // Error data that can be delivered to the client/user.
   parentError?: any;      // Parent error
   validationErrors?: any; // Validation errors
   canRetry?: boolean;     // If the action that caused this error can be retried.
