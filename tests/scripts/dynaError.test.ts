@@ -21,6 +21,7 @@ describe('dynaError', () => {
         expect(error.code).toBe(undefined);
         expect(error.status).toBe(undefined);
         expect(error.data).toBe(undefined);
+        expect(error.userData).toBe(undefined);
         expect(error.parentError).toBe(undefined);
         expect(error.validationErrors).toBe(undefined);
         expect(error.canRetry).toBe(undefined);
@@ -37,6 +38,7 @@ describe('dynaError', () => {
           parentError: {message: 'Parent error'},
           validationErrors: {name: 'Is required'},
           data: {userId: 230130042},
+          userData: {level: 'basic'},
         });
       }
       catch (e) {
@@ -54,6 +56,7 @@ describe('dynaError', () => {
         expect(error.status).toBe(500);
         expect(error.canRetry).toBe(false);
         expect(error.data.userId).toBe(230130042);
+        expect(error.userData.level).toBe('basic');
       }
     });
   });
@@ -74,6 +77,7 @@ describe('dynaError', () => {
         expect(error.code).toBe(undefined);
         expect(error.status).toBe(undefined);
         expect(error.data).toBe(undefined);
+        expect(error.userData).toBe(undefined);
         expect(error.canRetry).toBe(undefined);
       }
     });

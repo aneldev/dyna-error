@@ -41,6 +41,7 @@ const dynaErrorByObject = (
     code,
     status,
     data,
+    userData,
     parentError,
     validationErrors,
     canRetry,
@@ -52,6 +53,7 @@ const dynaErrorByObject = (
   error.code = code;
   error.status = status;
   error.data = data;
+  error.userData = userData;
   error.parentError = parentError;
   error.validationErrors = validationErrors;
   error.canRetry = canRetry;
