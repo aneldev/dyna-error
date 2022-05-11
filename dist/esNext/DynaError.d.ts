@@ -4,6 +4,7 @@ export interface IErrorConfig {
     code?: number;
     status?: number;
     data?: any;
+    userData?: any;
     parentError?: any;
     validationErrors?: any;
     canRetry?: boolean;
@@ -15,6 +16,7 @@ export interface IDynaError extends Error {
     code?: number;
     status?: number;
     data?: any;
+    userData?: any;
     parentError?: any;
     validationErrors?: any;
     canRetry?: boolean;
