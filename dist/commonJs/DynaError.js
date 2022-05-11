@@ -11,13 +11,14 @@ var dynaErrorByString = function (message) {
     return dynaErrorByObject({ message: message });
 };
 var dynaErrorByObject = function (_a) {
-    var message = _a.message, userMessage = _a.userMessage, code = _a.code, status = _a.status, data = _a.data, parentError = _a.parentError, validationErrors = _a.validationErrors, canRetry = _a.canRetry;
+    var message = _a.message, userMessage = _a.userMessage, code = _a.code, status = _a.status, data = _a.data, userData = _a.userData, parentError = _a.parentError, validationErrors = _a.validationErrors, canRetry = _a.canRetry;
     var error = new Error("".concat(code === undefined ? '' : "".concat(code, " ")).concat(message));
     error.date = new Date();
     error.userMessage = userMessage;
     error.code = code;
     error.status = status;
     error.data = data;
+    error.userData = userData;
     error.parentError = parentError;
     error.validationErrors = validationErrors;
     error.canRetry = canRetry;
