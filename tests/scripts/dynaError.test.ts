@@ -1,13 +1,15 @@
-import "jest";
-
-import {dynaError, IDynaError} from "../../src";
+import {
+  dynaError,
+  IDynaError,
+} from "../../src";
 
 describe('dynaError', () => {
   describe('with error config', () => {
     it('Minimal use, just with a message', () => {
       try {
         throw dynaError({message: 'Something is invalid'});
-      } catch (e) {
+      }
+      catch (e) {
         const error: IDynaError = e;
         expect(error).toMatchSnapshot();
         expect((error.stack || '').length).toBeGreaterThan(0);
@@ -34,11 +36,10 @@ describe('dynaError', () => {
           canRetry: false,
           parentError: {message: 'Parent error'},
           validationErrors: {name: 'Is required'},
-          data: {
-            userId: 230130042,
-          },
+          data: {userId: 230130042},
         });
-      } catch (e) {
+      }
+      catch (e) {
         const error: IDynaError = e;
         expect(error).toMatchSnapshot();
         expect((error.stack || '').length).toBeGreaterThan(0);
@@ -60,7 +61,8 @@ describe('dynaError', () => {
     test('Error with string arg', () => {
       try {
         throw dynaError('Something is invalid');
-      } catch (e) {
+      }
+      catch (e) {
         const error: IDynaError = e;
         expect(error).toMatchSnapshot();
         expect((error.stack || '').length).toBeGreaterThan(0);
