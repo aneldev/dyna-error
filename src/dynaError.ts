@@ -11,7 +11,7 @@ export interface IErrorConfig {
 }
 
 export interface IDynaError extends Error {
-  date: Date;
+  date?: Date;
   message: string;
   userMessage?: string;
   code?: number;
@@ -21,7 +21,7 @@ export interface IDynaError extends Error {
   parentError?: any;
   validationErrors?: any;
   canRetry?: boolean;
-  isDynaError: true;
+  isDynaError?: true;
 }
 
 export const dynaError = (messageOrErrorConfig: string | IErrorConfig): IDynaError => {

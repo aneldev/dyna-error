@@ -15,7 +15,7 @@ describe('dynaError', () => {
         expect((error.stack || '').length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
         expect(error.date).not.toBe(undefined);
-        expect(error.date.valueOf()).toBeGreaterThan(0);
+        expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.message).toBe('Something is invalid');
         expect(error.userMessage).toBe(undefined);
         expect(error.code).toBe(undefined);
@@ -47,7 +47,7 @@ describe('dynaError', () => {
         expect((error.stack || '').length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
         expect(error.date).not.toBe(undefined);
-        expect(error.date.valueOf()).toBeGreaterThan(0);
+        expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.parentError.message).toBe('Parent error');
         expect(error.validationErrors?.name).toBe('Is required');
         expect(error.message).toBe('330010 Something is invalid');
@@ -71,7 +71,7 @@ describe('dynaError', () => {
         expect((error.stack || '').length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
         expect(error.date).not.toBe(undefined);
-        expect(error.date.valueOf()).toBeGreaterThan(0);
+        expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.message).toBe('Something is invalid');
         expect(error.userMessage).toBe(undefined);
         expect(error.code).toBe(undefined);
