@@ -7,6 +7,7 @@ export interface IErrorConfig {
   userData?: any;         // Error data that can be delivered to the client/user.
   parentError?: any;      // Parent error
   validationErrors?: any; // Validation errors
+  stack?: string;
   canRetry?: boolean;     // If the action that caused this error can be retried.
 }
 
@@ -24,17 +25,25 @@ export interface IDynaError extends Error {
   isDynaError?: true;
 }
 
-export const dynaError = (messageOrErrorConfig: string | IErrorConfig): IDynaError => {
-  return typeof messageOrErrorConfig === "string"
-    ? dynaErrorByString(messageOrErrorConfig)
-    : dynaErrorByObject(messageOrErrorConfig);
+export const dynaError = (
+  errorArg:
+    | string
+    | Error
+    | IErrorConfig,
+): IDynaError => {
+  if (typeof errorArg === "string") {
+    return dynaErrorByIDynaError({message: errorArg});
+  }
+  if (errorArg instanceof Error) {
+    return dynaError({
+      message: errorArg.message,
+      stack: errorArg.stack,
+    });
+  }
+  return dynaErrorByIDynaError(errorArg);
 };
 
-const dynaErrorByString = (message: string): IDynaError => {
-  return dynaErrorByObject({message});
-};
-
-const dynaErrorByObject = (
+const dynaErrorByIDynaError = (
   {
     message,
     userMessage,
@@ -47,16 +56,31 @@ const dynaErrorByObject = (
     canRetry,
   }: IErrorConfig,
 ): IDynaError => {
-  const error: IDynaError = new Error(`${code === undefined ? '' : `${code} `}${message}`) as any;
-  error.date = new Date();
-  error.userMessage = userMessage;
-  error.code = code;
-  error.status = status;
-  error.data = data;
-  error.userData = userData;
-  error.parentError = parentError;
-  error.validationErrors = validationErrors;
-  error.canRetry = canRetry;
-  error.isDynaError = true;
-  return error;
+  const fullMessage = [
+    code !== undefined ? `${code}:` : '',
+    message,
+  ].filter(Boolean).join(' ');
+  const nError = new Error(fullMessage);
+  return removeUndefined({
+    date: new Date,
+    name: 'Error',
+    code,
+    status,
+    message: fullMessage,
+    userMessage,
+    data,
+    userData,
+    parentError,
+    validationErrors,
+    canRetry,
+    stack: nError.stack,
+    isDynaError: true,
+  });
+};
+
+const removeUndefined = (data: Record<string, any>): any => {
+  for (const key in data) {
+    if (data[key] === undefined) delete data[key];
+  }
+  return data;
 };

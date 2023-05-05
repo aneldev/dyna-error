@@ -1,7 +1,49 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`dynaError with error config Minimal use, just with a message 1`] = `[Error: Something is invalid]`;
+exports[`dynaError From native Error 1`] = `
+Object {
+  "isDynaError": true,
+  "message": "Something went wrong",
+  "name": "Error",
+}
+`;
 
-exports[`dynaError with error config Use with all properties 1`] = `[Error: 330010 Something is invalid]`;
+exports[`dynaError with error config Minimal use, just with a message 1`] = `
+Object {
+  "isDynaError": true,
+  "message": "Something is invalid",
+  "name": "Error",
+}
+`;
 
-exports[`dynaError with string argument Error with string arg 1`] = `[Error: Something is invalid]`;
+exports[`dynaError with error config Use with all properties 1`] = `
+Object {
+  "canRetry": false,
+  "code": 330010,
+  "data": Object {
+    "userId": 230130042,
+  },
+  "isDynaError": true,
+  "message": "330010: Something is invalid",
+  "name": "Error",
+  "parentError": Object {
+    "message": "Parent error",
+  },
+  "status": 500,
+  "userData": Object {
+    "level": "basic",
+  },
+  "userMessage": "Please retry",
+  "validationErrors": Object {
+    "name": "Is required",
+  },
+}
+`;
+
+exports[`dynaError with string argument Error with string arg 1`] = `
+Object {
+  "isDynaError": true,
+  "message": "Something is invalid",
+  "name": "Error",
+}
+`;

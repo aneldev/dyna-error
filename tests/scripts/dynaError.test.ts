@@ -11,10 +11,9 @@ describe('dynaError', () => {
       }
       catch (e) {
         const error: IDynaError = e;
-        expect(error).toMatchSnapshot();
+        expect(clearForSnapshot(error)).toMatchSnapshot();
         expect((error.stack || '').length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
-        expect(error.date).not.toBe(undefined);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.message).toBe('Something is invalid');
         expect(error.userMessage).toBe(undefined);
@@ -43,14 +42,13 @@ describe('dynaError', () => {
       }
       catch (e) {
         const error: IDynaError = e;
-        expect(error).toMatchSnapshot();
+        expect(clearForSnapshot(error)).toMatchSnapshot();
         expect((error.stack || '').length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
-        expect(error.date).not.toBe(undefined);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.parentError.message).toBe('Parent error');
         expect(error.validationErrors?.name).toBe('Is required');
-        expect(error.message).toBe('330010 Something is invalid');
+        expect(error.message).toBe('330010: Something is invalid');
         expect(error.userMessage).toBe('Please retry');
         expect(error.code).toBe(330010);
         expect(error.status).toBe(500);
@@ -67,10 +65,9 @@ describe('dynaError', () => {
       }
       catch (e) {
         const error: IDynaError = e;
-        expect(error).toMatchSnapshot();
+        expect(clearForSnapshot(error)).toMatchSnapshot();
         expect((error.stack || '').length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
-        expect(error.date).not.toBe(undefined);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.message).toBe('Something is invalid');
         expect(error.userMessage).toBe(undefined);
@@ -82,4 +79,15 @@ describe('dynaError', () => {
       }
     });
   });
+  test('From native Error', () => {
+    const error = dynaError(new Error("Something went wrong"));
+    expect(clearForSnapshot(error)).toMatchSnapshot();
+  });
 });
+
+const clearForSnapshot = (error: IDynaError): any => {
+  const output = {...error};
+  delete output.date;
+  delete output.stack;
+  return output;
+};

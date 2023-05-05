@@ -7,6 +7,7 @@ export interface IErrorConfig {
     userData?: any;
     parentError?: any;
     validationErrors?: any;
+    stack?: string;
     canRetry?: boolean;
 }
 export interface IDynaError extends Error {
@@ -22,4 +23,4 @@ export interface IDynaError extends Error {
     canRetry?: boolean;
     isDynaError?: true;
 }
-export declare const dynaError: (messageOrErrorConfig: string | IErrorConfig) => IDynaError;
+export declare const dynaError: (errorArg: string | Error | IErrorConfig) => IDynaError;
