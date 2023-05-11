@@ -1,10 +1,10 @@
 {
   "name": "dyna-error",
-  "version": "2.0.3",
+  "version": "3.0.2",
   "description": "The dyna-error",
   "repository": {
     "type": "git",
-    "url": "http://github.com/YOUR_ACCOUNT/dyna-error"
+    "url": "http://github.com/aneldev/dyna-error"
   },
   "private": false,
   "sideEffects": false,

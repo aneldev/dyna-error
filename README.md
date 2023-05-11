@@ -161,3 +161,19 @@ The error is not an `Error` instance
 With `dynaError` you have rich errors that can consume them easier.
 
 `IDynaError` is full compatible with Javascript's `Error`.
+
+# Change log
+
+## v1
+
+**First version**
+
+## v2
+
+Extends Native JS Error
+
+## v3
+
+Returns new object compatible with JS Error.
+
+This make the error serializable for JSON.stringify.
