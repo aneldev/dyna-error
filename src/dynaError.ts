@@ -50,7 +50,9 @@ export interface IErrorConfig {
   canRetry?: boolean;
 
   /**
-   * Default is true. If code is defined, the error message will be prefixed with the error code.
+   * If code is defined, the error message will be prefixed with the error code.
+   *
+   * @default false
    */
   prefixMessageWithCode?: boolean;
 }
@@ -98,7 +100,7 @@ const dynaErrorByIDynaError = (
     parentError,
     validationErrors,
     canRetry,
-    prefixMessageWithCode = true,
+    prefixMessageWithCode = false,
   }: IErrorConfig,
 ): IDynaError => {
   const fullMessage = [
