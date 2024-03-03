@@ -8,7 +8,16 @@ export interface IErrorConfig {
   parentError?: any;      // Parent error
   validationErrors?: any; // Validation errors
   stack?: string;
-  canRetry?: boolean;     // If the action that caused this error can be retried.
+
+  /**
+   * Indicates whether the action that caused this error can be retried.
+   */
+  canRetry?: boolean;
+
+  /**
+   * Default is true. If code is defined, the error message will be prefixed with the error code.
+   */
+  prefixMessageWithCode?: boolean;
 }
 
 export interface IDynaError extends Error {
@@ -54,12 +63,17 @@ const dynaErrorByIDynaError = (
     parentError,
     validationErrors,
     canRetry,
+    prefixMessageWithCode = true,
   }: IErrorConfig,
 ): IDynaError => {
   const fullMessage = [
-    code !== undefined ? `${code}:` : '',
+    code !== undefined && prefixMessageWithCode
+      ? `${code}:`
+      : '',
     message,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
   const nError = new Error(fullMessage);
   return removeUndefined({
     date: new Date,
