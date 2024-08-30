@@ -1,13 +1,9 @@
 .git/
 .idea/
-.vscode/
-.DS_Store
+dev/public/static
 coverage/
-debug-ground/debug-dev-on-nodejs/
+dist/
+tests/setup/testEnvVariables.ts
 node_modules/
 temp/
-/npm-debug.log
 /bash.exe.stackdump
-/update-externals.sh
-/yarn-error.log
-/dist/commonJs/webpack-debug-node.index.d.ts

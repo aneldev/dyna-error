@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`dynaError From native Error 1`] = `
-Object {
+{
   "isDynaError": true,
   "message": "Something went wrong",
   "name": "Error",
@@ -9,7 +9,7 @@ Object {
 `;
 
 exports[`dynaError with error config Minimal use, just with a message 1`] = `
-Object {
+{
   "isDynaError": true,
   "message": "Something is invalid",
   "name": "Error",
@@ -17,31 +17,31 @@ Object {
 `;
 
 exports[`dynaError with error config Use with all properties 1`] = `
-Object {
+{
   "canRetry": false,
   "code": 330010,
-  "data": Object {
+  "data": {
     "userId": 230130042,
   },
   "isDynaError": true,
   "message": "330010: Something is invalid",
   "name": "Error",
-  "parentError": Object {
+  "parentError": {
     "message": "Parent error",
   },
   "status": 500,
-  "userData": Object {
+  "userData": {
     "level": "basic",
   },
   "userMessage": "Please retry",
-  "validationErrors": Object {
+  "validationErrors": {
     "name": "Is required",
   },
 }
 `;
 
 exports[`dynaError with string argument Error with string arg 1`] = `
-Object {
+{
   "isDynaError": true,
   "message": "Something is invalid",
   "name": "Error",

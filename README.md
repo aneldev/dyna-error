@@ -1,70 +1,73 @@
 # dynaError
 
-`dynaError` extends the JavaScript's `Error` with more data than a message only.
+`dynaError` enhances JavaScript's `Error` by adding more data beyond just a message.
 
-Create more sophisticated errors, with more properties like the
+Create more detailed errors with properties like:
 
-- `userMessage` property for the end-user, or
-- with more `data` for debugging 
+- `userMessage` for the end-user, or
+- Additional `data` for debugging
 
-together with the native `Error` with the great stack.
+All this while keeping the benefits of the native `Error`, including the stack trace.
 
 Written in TypeScript.
 
 # Usage
-_Examples are in a TypeScript_
+_Examples are in TypeScript_
 
 ## Import
-```
-import {dynaError} from "dyna-error";
+```typescript
+import {
+  IDynaError,
+  dynaError,
+} from "dyna-error";
 ```
 
-## Simple example
+## Simple Example
 
-Instead of
+Instead of this:
+```typescript
+throw new Error('Service not available');
 ```
-throw new Error ('Service not available');
-```
-do this
-```
+You can do this:
+```typescript
 throw dynaError('Service not available');
 ```
-or this
+or this:
+```typescript
+throw dynaError({ message: 'Service not available' });
 ```
-throw dynaError({message: 'Service not available'});
-```
-where is the same.
+which is essentially the same.
 
-Now add some more info about this error
+Now, let's add some more details to this error:
 
-```
+```typescript
 throw dynaError({
   message: 'Service not available',
   userMessage: 'Something went wrong, please retry',
   canRetry: true,
   data: {
-    serviceResponse: {...} // Pass more info for debugging
+    serviceResponse: {...} // Additional info for debugging
   }
 });
 ```
 
-## Real example
+## Real Example
 
-```
+```typescript
 // A fetch function
 const getUserSalary = async (userId: string): Promise<IUser> => {
-  const salaryServiceAvaialble = await getchUserSalaryAvaialble();
+  const salaryServiceAvailable = await fetchUserSalaryAvailable();
   
-  if (!salaryServiceAvaialble) throw dynaError({
+  if (!salaryServiceAvailable) throw dynaError({
     message: 'Service not ready',
-    userMessage: 'System overlaoaded, please retry.',
+    userMessage: 'System overloaded, please retry.',
     canRetry: true,
     data: {
       salaryInfo,
     },
   });
   
-  return getchUserSalary();
+  return fetchUserSalary();
 };
 
 
@@ -72,19 +75,19 @@ const getUserSalary = async (userId: string): Promise<IUser> => {
 try {
   await getUserSalary(userId);
 } catch (e) {
-  const error: IDynaError = e;  // It is free cast it, even if the e is not a IDynaError.
+  const error: IDynaError = e;  // You can safely cast it, even if e is not an IDynaError.
   if (error.userMessage) alert(error.userMessage);
-  setState(canRetry: !!error.canRetry);
+  setState({ canRetry: !!error.canRetry });
 }
 ```
 
 # API
 
-## dynaError arg object
+## dynaError Argument Object
 
-`dynaError` expects a string to be the message of the error **or** an object of the `IErrorConfig` interface.
+`dynaError` accepts a string as the error message **or** an object based on the `IErrorConfig` interface.
 
-From the `IErrorConfig`, only the `message` is required.
+In `IErrorConfig`, only the `message` is required.
 
 ```typescript
 export interface IErrorConfig {
@@ -155,9 +158,9 @@ export interface IErrorConfig {
 }
 ```
 
-A full example of a `dynaError` thrown.
+Here’s a full example of a `dynaError` being thrown:
 
-```
+```typescript
 throw dynaError({
   message: 'Salary service not available',
   userMessage: 'Please retry',
@@ -173,9 +176,9 @@ throw dynaError({
 });
 ```
 
-## dynaError thrown Error
+## dynaError Thrown Error
 
-This is what `dynaError` returns
+This is what `dynaError` returns:
 
 ```typescript
 export interface IDynaError extends Error {
@@ -193,31 +196,32 @@ export interface IDynaError extends Error {
   isDynaError?: true;
 }
 ```
-A full example of a `dynaError` catch.
 
-```
+Here’s a full example of a `dynaError` being caught:
+
+```typescript
 try {
   return getSalary(userId);
 } catch(e) {
   const error: IDynaError = e;
-  // Here you have all properties of the above IDynaError interface.
-  // You are free to cast the e, even if it is not a dynaError.
-  // Since all properties of IDynaError are optional the output cast is valid.
+  // Here you have all properties from the above IDynaError interface.
+  // You can safely cast e, even if it's not a dynaError.
+  // Since all properties of IDynaError are optional, the output cast is valid.
 }
 ```
-# Sum up
 
-In JavaScript, you can throw anything as an error. It is not wrong to throw an object as an error, but you miss a few things.
+# Summary
 
-Throwing an object as an error
-You don't have the `stack`
-The error is not an `Error` instance
+In JavaScript, you can throw anything as an error. It’s not wrong to throw an object as an error, but you miss a few things:
 
-With `dynaError` you have rich errors that can consume them easier.
+- No `stack` trace
+- The error is not an `Error` instance
 
-`IDynaError` is full compatible with Javascript's `Error`.
+With `dynaError`, you get richer errors that are easier to handle.
 
-# Change log
+`IDynaError` is fully compatible with JavaScript’s `Error`.
+
+# Changelog
 
 ## v1
 
@@ -225,15 +229,15 @@ With `dynaError` you have rich errors that can consume them easier.
 
 ## v2
 
-Extends Native JS Error
+Extended Native JS Error
 
 ## v3
 
-Returns new object compatible with JS Error.
+Returns a new object compatible with JS Error.
 
-This make the error serializable for JSON.stringify.
+This makes the error serializable with `JSON.stringify`.
 
 ## v4
 
-- Compatible with `unknwon` errors
-- Collects always `stack` trace, but can be disabled by the `stack` property
+- Compatible with `unknown` errors
+- Always collects a `stack` trace, but it can be disabled using the `stack` property.

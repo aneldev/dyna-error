@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const isSingleModule = fs.existsSync('./src/index.ts') || fs.existsSync('./src/index.tsx');
+const isSingleModule = fs.existsSync('./src/index.ts');
 const isMultiModule = !isSingleModule;
 
 const tsConfigJson = require('./tsconfig.json');
@@ -8,7 +8,6 @@ const tsConfigJson = require('./tsconfig.json');
 if (isSingleModule) {
   tsConfigJson.files = [
     fs.existsSync("./src/index.ts") && "./src/index.ts",
-    fs.existsSync("./src/index.tsx") && "./src/index.tsx",
   ]
     .filter(Boolean);
 }
@@ -17,8 +16,10 @@ if (isMultiModule) {
   const getModuleNames =
     root =>
       fs.readdirSync(root, {withFileTypes: true})
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => dirent.name);
+        .filter(item => item.isDirectory())
+        .map(item => item.name)
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
 
   const moduleNames = getModuleNames('./src');
 

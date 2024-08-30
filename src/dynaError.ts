@@ -131,7 +131,7 @@ const dynaErrorByIDynaError = (
     .filter(Boolean)
     .join(' ');
   return removeUndefined({
-    date: new Date,
+    date: new Date(),
     name: 'Error',
     code,
     status,
