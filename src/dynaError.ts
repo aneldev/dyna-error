@@ -7,7 +7,7 @@ export interface IErrorConfig {
   userData?: any;         // Error data that can be delivered to the client/user.
   parentError?: any;      // Parent error
   validationErrors?: any; // Validation errors
-  stack?: string;
+  noStack?: boolean;      // Do not collect stack (for security reasons)
   canRetry?: boolean;     // If the action that caused this error can be retried.
 }
 
@@ -53,6 +53,7 @@ const dynaErrorByIDynaError = (
     userData,
     parentError,
     validationErrors,
+    noStack = false,
     canRetry,
   }: IErrorConfig,
 ): IDynaError => {
@@ -73,7 +74,7 @@ const dynaErrorByIDynaError = (
     parentError,
     validationErrors,
     canRetry,
-    stack: nError.stack,
+    stack: noStack ? undefined : nError.stack,
     isDynaError: true,
   });
 };
