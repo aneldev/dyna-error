@@ -38,6 +38,7 @@ describe('dynaError', () => {
           validationErrors: {name: 'Is required'},
           data: {userId: 230130042},
           userData: {level: 'basic'},
+          prefixMessageWithCode: true,
         });
       }
       catch (e) {

@@ -15,11 +15,15 @@ var dynaError = function (errorArg) {
 };
 exports.dynaError = dynaError;
 var dynaErrorByIDynaError = function (_a) {
-    var message = _a.message, userMessage = _a.userMessage, code = _a.code, status = _a.status, data = _a.data, userData = _a.userData, parentError = _a.parentError, validationErrors = _a.validationErrors, canRetry = _a.canRetry;
+    var message = _a.message, userMessage = _a.userMessage, code = _a.code, status = _a.status, data = _a.data, userData = _a.userData, parentError = _a.parentError, validationErrors = _a.validationErrors, canRetry = _a.canRetry, _b = _a.prefixMessageWithCode, prefixMessageWithCode = _b === void 0 ? false : _b;
     var fullMessage = [
-        code !== undefined ? "".concat(code, ":") : '',
+        code !== undefined && prefixMessageWithCode
+            ? "".concat(code, ":")
+            : '',
         message,
-    ].filter(Boolean).join(' ');
+    ]
+        .filter(Boolean)
+        .join(' ');
     var nError = new Error(fullMessage);
     return removeUndefined({
         date: new Date,

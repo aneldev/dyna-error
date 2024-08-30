@@ -1,14 +1,60 @@
 export interface IErrorConfig {
-  message: string;        // Error message for debugging.
-  userMessage?: string;   // Error message for the end user (ideally translated and without sensitive info).
-  code?: number;          // Developer error code, any number to identify the point where the error occurred.
-  status?: number;        // Network error status, http code or any status that other parts of the app can understand.
-  data?: any;             // Error data for debugging (might contain sensitive info).
-  userData?: any;         // Error data that can be delivered to the client/user.
-  parentError?: any;      // Parent error
-  validationErrors?: any; // Validation errors
+  /**
+   * Error message intended for debugging purposes.
+   */
+  message: string;
+
+  /**
+   * User-friendly error message, ideally translated and devoid of sensitive information.
+   */
+  userMessage?: string;
+
+  /**
+   * Developer-assigned error code for identifying the point where the error occurred.
+   */
+  code?: number;
+
+  /**
+   * Network error status, which can be an HTTP code or any status understandable by other parts of the application.
+   */
+  status?: number;
+
+  /**
+   * Error data intended for debugging, may contain sensitive information.
+   */
+  data?: any;
+
+  /**
+   * Error data that can be safely delivered to the client or end-user.
+   */
+  userData?: any;
+
+  /**
+   * Reference to the parent error.
+   */
+  parentError?: any;
+
+  /**
+   * Validation errors associated with the error.
+   */
+  validationErrors?: any;
+
+  /**
+   * Stack trace representing the error.
+   */
   noStack?: boolean;      // Do not collect stack (for security reasons)
-  canRetry?: boolean;     // If the action that caused this error can be retried.
+
+  /**
+   * Indicates whether the action that caused this error can be retried.
+   */
+  canRetry?: boolean;
+
+  /**
+   * If code is defined, the error message will be prefixed with the error code.
+   *
+   * @default false
+   */
+  prefixMessageWithCode?: boolean;
 }
 
 export interface IDynaError extends Error {
@@ -55,12 +101,17 @@ const dynaErrorByIDynaError = (
     validationErrors,
     noStack = false,
     canRetry,
+    prefixMessageWithCode = false,
   }: IErrorConfig,
 ): IDynaError => {
   const fullMessage = [
-    code !== undefined ? `${code}:` : '',
+    code !== undefined && prefixMessageWithCode
+      ? `${code}:`
+      : '',
     message,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
   const nError = new Error(fullMessage);
   return removeUndefined({
     date: new Date,
