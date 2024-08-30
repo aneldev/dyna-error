@@ -8,14 +8,21 @@ var dynaError = function (errorArg) {
     if (errorArg instanceof Error) {
         return (0, exports.dynaError)({
             message: errorArg.message,
-            stack: errorArg.stack,
+            _applyStackContent: errorArg.stack,
         });
     }
-    return dynaErrorByIDynaError(errorArg);
+    if (errorArg && (errorArg === null || errorArg === void 0 ? void 0 : errorArg.message)) {
+        return dynaErrorByIDynaError(errorArg);
+    }
+    // This is a case of something strage unknown
+    return (0, exports.dynaError)({
+        message: "Unknown nature of error",
+        parentError: { error: errorArg },
+    });
 };
 exports.dynaError = dynaError;
 var dynaErrorByIDynaError = function (_a) {
-    var message = _a.message, userMessage = _a.userMessage, code = _a.code, status = _a.status, data = _a.data, userData = _a.userData, parentError = _a.parentError, validationErrors = _a.validationErrors, canRetry = _a.canRetry, _b = _a.prefixMessageWithCode, prefixMessageWithCode = _b === void 0 ? false : _b;
+    var message = _a.message, userMessage = _a.userMessage, code = _a.code, status = _a.status, data = _a.data, userData = _a.userData, parentError = _a.parentError, validationErrors = _a.validationErrors, _b = _a.stack, stack = _b === void 0 ? true : _b, _applyStackContent = _a._applyStackContent, canRetry = _a.canRetry, _c = _a.prefixMessageWithCode, prefixMessageWithCode = _c === void 0 ? false : _c;
     var fullMessage = [
         code !== undefined && prefixMessageWithCode
             ? "".concat(code, ":")
@@ -24,7 +31,6 @@ var dynaErrorByIDynaError = function (_a) {
     ]
         .filter(Boolean)
         .join(' ');
-    var nError = new Error(fullMessage);
     return removeUndefined({
         date: new Date,
         name: 'Error',
@@ -37,7 +43,11 @@ var dynaErrorByIDynaError = function (_a) {
         parentError: parentError,
         validationErrors: validationErrors,
         canRetry: canRetry,
-        stack: nError.stack,
+        stack: _applyStackContent
+            ? _applyStackContent
+            : stack
+                ? new Error(fullMessage).stack
+                : undefined,
         isDynaError: true,
     });
 };

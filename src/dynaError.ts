@@ -41,8 +41,13 @@ export interface IErrorConfig {
 
   /**
    * Stack trace representing the error.
+   *
+   * Collect stack or not.
+   * For security reasons (if the error is shipped to the client) might be not wanted.
+   *
+   * @default true
    */
-  noStack?: boolean;      // Do not collect stack (for security reasons)
+  stack?: boolean;      // Do not collect stack (for security reasons)
 
   /**
    * Indicates whether the action that caused this error can be retried.
@@ -55,6 +60,9 @@ export interface IErrorConfig {
    * @default false
    */
   prefixMessageWithCode?: boolean;
+
+  // For internal use, do not use it!.
+  _applyStackContent?: any;
 }
 
 export interface IDynaError extends Error {
@@ -66,6 +74,7 @@ export interface IDynaError extends Error {
   data?: any;
   userData?: any;
   parentError?: any;
+  stack?: string;
   validationErrors?: any;
   canRetry?: boolean;
   isDynaError?: true;
@@ -75,7 +84,8 @@ export const dynaError = (
   errorArg:
     | string
     | Error
-    | IErrorConfig,
+    | IErrorConfig
+    | unknown,
 ): IDynaError => {
   if (typeof errorArg === "string") {
     return dynaErrorByIDynaError({message: errorArg});
@@ -83,10 +93,17 @@ export const dynaError = (
   if (errorArg instanceof Error) {
     return dynaError({
       message: errorArg.message,
-      stack: errorArg.stack,
+      _applyStackContent: errorArg.stack,
     });
   }
-  return dynaErrorByIDynaError(errorArg);
+  if (errorArg && (errorArg as any)?.message) {
+    return dynaErrorByIDynaError(errorArg as any);
+  }
+  // This is a case of something strage unknown
+  return dynaError({
+    message: "Unknown nature of error",
+    parentError: {error: errorArg},
+  });
 };
 
 const dynaErrorByIDynaError = (
@@ -99,7 +116,8 @@ const dynaErrorByIDynaError = (
     userData,
     parentError,
     validationErrors,
-    noStack = false,
+    stack = true,
+    _applyStackContent,
     canRetry,
     prefixMessageWithCode = false,
   }: IErrorConfig,
@@ -112,7 +130,6 @@ const dynaErrorByIDynaError = (
   ]
     .filter(Boolean)
     .join(' ');
-  const nError = new Error(fullMessage);
   return removeUndefined({
     date: new Date,
     name: 'Error',
@@ -125,7 +142,12 @@ const dynaErrorByIDynaError = (
     parentError,
     validationErrors,
     canRetry,
-    stack: noStack ? undefined : nError.stack,
+    stack:
+      _applyStackContent
+        ? _applyStackContent
+        : stack
+          ? new Error(fullMessage).stack
+          : undefined,
     isDynaError: true,
   });
 };

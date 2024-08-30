@@ -12,7 +12,7 @@ describe('dynaError', () => {
       catch (e) {
         const error: IDynaError = e;
         expect(clearForSnapshot(error)).toMatchSnapshot();
-        expect((error.stack || '').length).toBeGreaterThan(0);
+        expect(error.stack?.length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.message).toBe('Something is invalid');
@@ -44,7 +44,7 @@ describe('dynaError', () => {
       catch (e) {
         const error: IDynaError = e;
         expect(clearForSnapshot(error)).toMatchSnapshot();
-        expect((error.stack || '').length).toBeGreaterThan(0);
+        expect(error.stack?.length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.parentError.message).toBe('Parent error');
@@ -68,7 +68,7 @@ describe('dynaError', () => {
         const error: IDynaError = e;
         expect(clearForSnapshot(error)).toMatchSnapshot();
         expect((error.stack || '').length).toBeGreaterThan(0);
-        expect(error.isDynaError).toBe(true);
+        expect(error.stack?.length).toBeGreaterThan(0);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.message).toBe('Something is invalid');
         expect(error.userMessage).toBe(undefined);

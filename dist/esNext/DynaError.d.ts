@@ -33,8 +33,13 @@ export interface IErrorConfig {
     validationErrors?: any;
     /**
      * Stack trace representing the error.
+     *
+     * Collect stack or not.
+     * For security reasons (if the error is shipped to the client) might be not wanted.
+     *
+     * @default true
      */
-    stack?: string;
+    stack?: boolean;
     /**
      * Indicates whether the action that caused this error can be retried.
      */
@@ -45,6 +50,7 @@ export interface IErrorConfig {
      * @default false
      */
     prefixMessageWithCode?: boolean;
+    _applyStackContent?: any;
 }
 export interface IDynaError extends Error {
     date?: Date;
@@ -55,8 +61,9 @@ export interface IDynaError extends Error {
     data?: any;
     userData?: any;
     parentError?: any;
+    stack?: string;
     validationErrors?: any;
     canRetry?: boolean;
     isDynaError?: true;
 }
-export declare const dynaError: (errorArg: string | Error | IErrorConfig) => IDynaError;
+export declare const dynaError: (errorArg: string | Error | IErrorConfig | unknown) => IDynaError;

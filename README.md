@@ -86,19 +86,73 @@ try {
 
 From the `IErrorConfig`, only the `message` is required.
 
-```
+```typescript
 export interface IErrorConfig {
-  message: string;        // Error message for debugging.
-  userMessage?: string;   // Error message for the end user (ideally translated and without sensitive info).
-  code?: number;          // Developer error code, any number to identify the point where the error occurred.
-  status?: number;        // Network error status, http code or any status that other parts of the app can understand.
-  data?: any;             // Error data for debugging (might contain sensitive info).
-  userData?: any;         // Error data that can be delivered to the client/user.
-  parentError?: any;      // Parent error
-  validationErrors?: any; // Validation errors
-  canRetry?: boolean;     // If the action that caused this error can be retried.
-}
+  /**
+   * Error message intended for debugging purposes.
+   */
+  message: string;
 
+  /**
+   * User-friendly error message, ideally translated and devoid of sensitive information.
+   */
+  userMessage?: string;
+
+  /**
+   * Developer-assigned error code for identifying the point where the error occurred.
+   */
+  code?: number;
+
+  /**
+   * Network error status, which can be an HTTP code or any status understandable by other parts of the application.
+   */
+  status?: number;
+
+  /**
+   * Error data intended for debugging, may contain sensitive information.
+   */
+  data?: any;
+
+  /**
+   * Error data that can be safely delivered to the client or end-user.
+   */
+  userData?: any;
+
+  /**
+   * Reference to the parent error.
+   */
+  parentError?: any;
+
+  /**
+   * Validation errors associated with the error.
+   */
+  validationErrors?: any;
+
+  /**
+   * Stack trace representing the error.
+   *
+   * Collect stack or not.
+   * For security reasons (if the error is shipped to the client) might be not wanted.
+   *
+   * @default true
+   */
+  stack?: boolean;      // Do not collect stack (for security reasons)
+
+  /**
+   * Indicates whether the action that caused this error can be retried.
+   */
+  canRetry?: boolean;
+
+  /**
+   * If code is defined, the error message will be prefixed with the error code.
+   *
+   * @default false
+   */
+  prefixMessageWithCode?: boolean;
+
+  // For internal use, do not use it!.
+  _applyStackContent?: any;
+}
 ```
 
 A full example of a `dynaError` thrown.
@@ -123,20 +177,21 @@ throw dynaError({
 
 This is what `dynaError` returns
 
-```
-interface IDynaError extends Error {
-  date: Date;               // The date that the error occured
-  message: string;          // What you applied on `dynaError`
-  userMessage?: string;     // What you applied on `dynaError`
-  code?: number;            // What you applied on `dynaError`
-  status?: number;          // What you applied on `dynaError`
-  data?: any;               // What you applied on `dynaError`
-  parentError?: any;        // What you applied on `dynaError`
-  validationErrors?: any;   // What you applied on `dynaError`
-  canRetry?: boolean;       // What you applied on `dynaError`
-  isDynaError: true;        // Informative, just gives the info if you used the `dynaError` for this error
+```typescript
+export interface IDynaError extends Error {
+  date?: Date;
+  message: string;
+  userMessage?: string;
+  code?: number;
+  status?: number;
+  data?: any;
+  userData?: any;
+  parentError?: any;
+  stack?: string;
+  validationErrors?: any;
+  canRetry?: boolean;
+  isDynaError?: true;
 }
-
 ```
 A full example of a `dynaError` catch.
 
@@ -177,3 +232,8 @@ Extends Native JS Error
 Returns new object compatible with JS Error.
 
 This make the error serializable for JSON.stringify.
+
+## v4
+
+- Compatible with `unknwon` errors
+- Collects always `stack` trace, but can be disabled by the `stack` property
