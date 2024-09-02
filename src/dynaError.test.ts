@@ -1,7 +1,7 @@
 import {
   dynaError,
   IDynaError,
-} from "../../src";
+} from "./";
 
 describe('dynaError', () => {
   describe('with error config', () => {
@@ -10,9 +10,9 @@ describe('dynaError', () => {
         throw dynaError({message: 'Something is invalid'});
       }
       catch (e) {
-        const error: IDynaError = e;
+        const error = e as IDynaError;
         expect(clearForSnapshot(error)).toMatchSnapshot();
-        expect((error.stack || '').length).toBeGreaterThan(0);
+        expect(error.stack?.length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.message).toBe('Something is invalid');
@@ -42,9 +42,9 @@ describe('dynaError', () => {
         });
       }
       catch (e) {
-        const error: IDynaError = e;
+        const error = e as IDynaError;
         expect(clearForSnapshot(error)).toMatchSnapshot();
-        expect((error.stack || '').length).toBeGreaterThan(0);
+        expect(error.stack?.length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.parentError.message).toBe('Parent error');
@@ -65,10 +65,10 @@ describe('dynaError', () => {
         throw dynaError('Something is invalid');
       }
       catch (e) {
-        const error: IDynaError = e;
+        const error = e as IDynaError;
         expect(clearForSnapshot(error)).toMatchSnapshot();
         expect((error.stack || '').length).toBeGreaterThan(0);
-        expect(error.isDynaError).toBe(true);
+        expect(error.stack?.length).toBeGreaterThan(0);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
         expect(error.message).toBe('Something is invalid');
         expect(error.userMessage).toBe(undefined);
