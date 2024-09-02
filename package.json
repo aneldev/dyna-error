@@ -28,8 +28,7 @@
     "test-no-coverage": "jest --collectCoverage=false --no-cache --runInBand",
     "test-update-snapshots": "jest --updateSnapshot --runInBand",
     "update-deps": "rm rf pnpm-lock.yaml; pnpm update --latest",
-    "publish-push2": "pnpm version patch && npm publish --non-interactive && git push && git push --tags",
-    "publish-push": "pnpm version patch && pnpm publish && git push && git push --tags",
+    "publish-push": "pnpm version patch && npm publish --yes && git push && git push --tags",
     "release": "pnpm build && pnpm test && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && pnpm publish-push"
   },
   "keywords": [],
