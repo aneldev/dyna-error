@@ -1,6 +1,7 @@
 .git/
 .idea/
 .vscode/
+.DS_Store
 dev/public/static
 coverage/
 tests/setup/testEnvVariables.ts
