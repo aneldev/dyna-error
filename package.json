@@ -30,7 +30,7 @@
     "update-deps": "rm rf pnpm-lock.yaml; pnpm update --latest",
     "publish-push2": "pnpm version patch && npm publish --non-interactive && git push && git push --tags",
     "publish-push": "pnpm version patch && pnpm publish && git push && git push --tags",
-    "release": "pnpm build && pnpm test && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && pnpm publish-push && pnpm storybook-deploy"
+    "release": "pnpm build && pnpm test && git add -u && git add -A && git commit --allow-empty -m \"Build changes\" && pnpm publish-push"
   },
   "keywords": [],
   "author": "Anel dev",
