@@ -1,8 +1,8 @@
 .git/
 .idea/
+.vscode/
 dev/public/static
 coverage/
 tests/setup/testEnvVariables.ts
 node_modules/
 temp/
-/bash.exe.stackdump
