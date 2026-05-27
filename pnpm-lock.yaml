@@ -39,7 +39,7 @@ importers:
         specifier: ^4.5.8
         version: 4.5.8
       '@types/node':
-        specifier: ^22.5.0
+        specifier: ^22.5.1
         version: 22.5.1
       '@types/react':
         specifier: ^18.3.4
@@ -138,6 +138,9 @@ importers:
         specifier: ^0.1.12
         version: 0.1.12(jest@29.7.0(@types/node@22.5.1)(babel-plugin-macros@3.1.0))
       jest-environment-jsdom:
+        specifier: ^29.7.0
+        version: 29.7.0
+      jest-environment-node:
         specifier: ^29.7.0
         version: 29.7.0
       jsdom:
@@ -8238,9 +8241,7 @@ snapshots:
       jest-runner: 24.9.0
       jest-runtime: 24.9.0
     transitivePeerDependencies:
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@jest/test-sequencer@29.7.0':
     dependencies:
@@ -12415,7 +12416,9 @@ snapshots:
       pretty-format: 24.9.0
       throat: 4.1.0
     transitivePeerDependencies:
+      - bufferutil
       - supports-color
+      - utf-8-validate
 
   jest-leak-detector@24.9.0:
     dependencies:
