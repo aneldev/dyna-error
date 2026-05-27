@@ -233,6 +233,21 @@ try {
 }
 ```
 
+# REPL
+
+Try `dynaError` interactively in a Node.js shell:
+
+```bash
+pnpm repl
+```
+
+Both `dynaError` and `DynaError` are pre-loaded in the context:
+
+```
+dyna-error> dynaError({ message: 'Service not available', canRetry: true })
+dyna-error> new DynaError({ message: 'test' })
+```
+
 # Summary
 
 `dynaError` gives you richer errors without giving up anything from native `Error`:

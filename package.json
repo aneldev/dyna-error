@@ -12,7 +12,11 @@
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "esnext": "dist/index.js",
+  "bin": {
+    "dyna-error": "./cli/shell.js"
+  },
   "scripts": {
+    "repl": "node cli/shell.js",
     "install-clean": "rm -rf node_modules; pnpm install",
     "prebuild": "node tsconfig.update.js",
     "build": "pnpm lint && rm -rf ./dist && webpack --config webpack.dist.config.js",
