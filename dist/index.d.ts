@@ -1,1 +1,1 @@
-export { dynaError, IErrorConfig, IDynaError, } from "./dynaError";
+export { dynaError, DynaError, IErrorConfig, IDynaError, } from "./dynaError";

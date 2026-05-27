@@ -1,44 +1,52 @@
 # dynaError
 
-`dynaError` enhances JavaScript's `Error` by adding more data beyond just a message.
+`dynaError` enriches JavaScript's `Error` with additional properties beyond just a message.
 
 Create more detailed errors with properties like:
 
-- `userMessage` for the end-user, or
-- Additional `data` for debugging
+- `userMessage` for the end-user
+- `code` and `status` for programmatic handling
+- `data` for debugging
 
-All this while keeping the benefits of the native `Error`, including the stack trace.
+All while keeping the full benefits of native `Error`: stack traces, `instanceof` checks, and JSON serialization.
 
 Written in TypeScript.
 
 # Usage
+
 _Examples are in TypeScript_
 
 ## Import
+
 ```typescript
 import {
   IDynaError,
-  dynaError,
+  DynaError,    // Optional — for instanceof checks or creatiuns with `new DynaError()`
+  dynaError,    // Easy factory method
 } from "dyna-error";
 ```
 
-## Simple Example
+## Simple example
 
-Instead of this:
+Instead of:
 ```typescript
 throw new Error('Service not available');
 ```
-You can do this:
+You can do:
 ```typescript
 throw dynaError('Service not available');
 ```
-or this:
+or:
+```typescript
+throw new DynaError({message: 'Service not available'});
+```
+or:
 ```typescript
 throw dynaError({ message: 'Service not available' });
 ```
 which is essentially the same.
 
-Now, let's add some more details to this error:
+Now with more detail:
 
 ```typescript
 throw dynaError({
@@ -46,18 +54,18 @@ throw dynaError({
   userMessage: 'Something went wrong, please retry',
   canRetry: true,
   data: {
-    serviceResponse: {...} // Additional info for debugging
-  }
+    serviceResponse: {...}, // Additional info for debugging
+  },
 });
 ```
 
-## Real Example
+## Real example
 
 ```typescript
 // A fetch function
 const getUserSalary = async (userId: string): Promise<IUser> => {
   const salaryServiceAvailable = await fetchUserSalaryAvailable();
-  
+
   if (!salaryServiceAvailable) throw dynaError({
     message: 'Service not ready',
     userMessage: 'System overloaded, please retry.',
@@ -66,7 +74,7 @@ const getUserSalary = async (userId: string): Promise<IUser> => {
       salaryInfo,
     },
   });
-  
+
   return fetchUserSalary();
 };
 
@@ -75,7 +83,7 @@ const getUserSalary = async (userId: string): Promise<IUser> => {
 try {
   await getUserSalary(userId);
 } catch (e) {
-  const error: IDynaError = e;  // You can safely cast it, even if e is not an IDynaError.
+  const error = dynaError(e); // wraps any unknown error into a DynaError (it is still JS Error)
   if (error.userMessage) alert(error.userMessage);
   setState({ canRetry: !!error.canRetry });
 }
@@ -83,9 +91,9 @@ try {
 
 # API
 
-## dynaError Argument Object
+## dynaError argument
 
-`dynaError` accepts a string as the error message **or** an object based on the `IErrorConfig` interface.
+`dynaError` accepts a string, a native `Error`, or an object based on the `IErrorConfig` interface.
 
 In `IErrorConfig`, only the `message` is required.
 
@@ -132,14 +140,12 @@ export interface IErrorConfig {
   validationErrors?: any;
 
   /**
-   * Stack trace representing the error.
-   *
-   * Collect stack or not.
-   * For security reasons (if the error is shipped to the client) might be not wanted.
+   * Whether to collect a stack trace.
+   * Disable for security when the error may be sent to the client.
    *
    * @default true
    */
-  stack?: boolean;      // Do not collect stack (for security reasons)
+  stack?: boolean;
 
   /**
    * Indicates whether the action that caused this error can be retried.
@@ -147,18 +153,15 @@ export interface IErrorConfig {
   canRetry?: boolean;
 
   /**
-   * If code is defined, the error message will be prefixed with the error code.
+   * If true and `code` is defined, the error message is prefixed with the error code.
    *
    * @default false
    */
   prefixMessageWithCode?: boolean;
-
-  // For internal use, do not use it!.
-  _applyStackContent?: any;
 }
 ```
 
-Here’s a full example of a `dynaError` being thrown:
+Full throw example:
 
 ```typescript
 throw dynaError({
@@ -176,9 +179,9 @@ throw dynaError({
 });
 ```
 
-## dynaError Thrown Error
+## dynaError return value
 
-This is what `dynaError` returns:
+`dynaError` returns a `DynaError` instance — a real `Error` subclass that satisfies the `IDynaError` interface.
 
 ```typescript
 export interface IDynaError extends Error {
@@ -194,50 +197,76 @@ export interface IDynaError extends Error {
   validationErrors?: any;
   canRetry?: boolean;
   isDynaError?: true;
+  toJSON(): Record<string, unknown>;
 }
 ```
 
-Here’s a full example of a `dynaError` being caught:
+Because it extends `Error`:
+
+```typescript
+const error = dynaError({ message: 'Something failed' });
+
+error instanceof Error     // true
+error instanceof DynaError // true
+```
+
+### JSON serialization
+
+`DynaError` has a `toJSON()` method, so it serializes correctly with `JSON.stringify`:
+
+```typescript
+JSON.stringify(error);
+// → {"name":"Error","message":"Something failed","isDynaError":true,"date":"..."}
+```
+
+The `stack` property is intentionally excluded from JSON output — stack traces contain sensitive path information and should not be sent to clients.
+
+Full catch example:
 
 ```typescript
 try {
   return getSalary(userId);
-} catch(e) {
-  const error: IDynaError = e;
-  // Here you have all properties from the above IDynaError interface.
-  // You can safely cast e, even if it's not a dynaError.
-  // Since all properties of IDynaError are optional, the output cast is valid.
+} catch (e) {
+  const error = dynaError(e);
+  // All IDynaError properties are available.
+  // dynaError() safely wraps any unknown value — even non-Error throws.
 }
 ```
 
 # Summary
 
-In JavaScript, you can throw anything as an error. It’s not wrong to throw an object as an error, but you miss a few things:
+`dynaError` gives you richer errors without giving up anything from native `Error`:
 
-- No `stack` trace
-- The error is not an `Error` instance
-
-With `dynaError`, you get richer errors that are easier to handle.
-
-`IDynaError` is fully compatible with JavaScript’s `Error`.
+| Feature                            | `new Error()` | `dynaError()` |
+|------------------------------------|---------------|---------------|
+| Stack trace                        | ✅             | ✅             |
+| `instanceof Error`                 | ✅             | ✅             |
+| `userMessage`, `code`, `status`, … | ❌             | ✅             |
+| Safe wrapping of unknown catches   | ❌             | ✅             |
+| `JSON.stringify` (all fields)      | ❌             | ✅             |
 
 # Changelog
 
 ## v1
 
-**First version**
+First version.
 
 ## v2
 
-Extended Native JS Error
+Extended native JS `Error`.
 
 ## v3
 
-Returns a new object compatible with JS Error.
-
-This makes the error serializable with `JSON.stringify`.
+Returns a new object compatible with JS `Error`.
 
 ## v4
 
 - Compatible with `unknown` errors
-- Always collects a `stack` trace, but it can be disabled using the `stack` property.
+- Always collects a stack trace, but it can be disabled via the `stack` property
+
+## v5
+
+- `dynaError()` now returns a real `DynaError extends Error` instance
+- `err instanceof Error` → `true`
+- `err instanceof DynaError` → `true` (the `DynaError` class is exported)
+- Added `toJSON()` method for explicit, predictable JSON serialization — `stack` is excluded by default for security

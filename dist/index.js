@@ -19,69 +19,149 @@ return /******/ (() => { // webpackBootstrap
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   dynaError: () => (/* binding */ _dynaError)
+/* harmony export */   DynaError: () => (/* binding */ DynaError),
+/* harmony export */   dynaError: () => (/* binding */ dynaError)
 /* harmony export */ });
-var _dynaError = function dynaError(errorArg) {
-  if (typeof errorArg === "string") {
-    return dynaErrorByIDynaError({
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _wrapNativeSuper(t) { var r = "function" == typeof Map ? new Map() : void 0; return _wrapNativeSuper = function _wrapNativeSuper(t) { if (null === t || !_isNativeFunction(t)) return t; if ("function" != typeof t) throw new TypeError("Super expression must either be null or a function"); if (void 0 !== r) { if (r.has(t)) return r.get(t); r.set(t, Wrapper); } function Wrapper() { return _construct(t, arguments, _getPrototypeOf(this).constructor); } return Wrapper.prototype = Object.create(t.prototype, { constructor: { value: Wrapper, enumerable: !1, writable: !0, configurable: !0 } }), _setPrototypeOf(Wrapper, t); }, _wrapNativeSuper(t); }
+function _construct(t, e, r) { if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments); var o = [null]; o.push.apply(o, e); var p = new (t.bind.apply(t, o))(); return r && _setPrototypeOf(p, r.prototype), p; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _isNativeFunction(t) { try { return -1 !== Function.toString.call(t).indexOf("[native code]"); } catch (n) { return "function" == typeof t; } }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+var DynaError = /*#__PURE__*/function (_Error) {
+  function DynaError() {
+    var _this;
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+        message: "Unknown dyna error"
+      },
+      message = _ref.message,
+      userMessage = _ref.userMessage,
+      code = _ref.code,
+      status = _ref.status,
+      data = _ref.data,
+      userData = _ref.userData,
+      parentError = _ref.parentError,
+      validationErrors = _ref.validationErrors,
+      _ref$stack = _ref.stack,
+      stack = _ref$stack === void 0 ? true : _ref$stack,
+      _applyStackContent = _ref._applyStackContent,
+      canRetry = _ref.canRetry,
+      _ref$prefixMessageWit = _ref.prefixMessageWithCode,
+      prefixMessageWithCode = _ref$prefixMessageWit === void 0 ? false : _ref$prefixMessageWit;
+    _classCallCheck(this, DynaError);
+    var fullMessage = [code !== undefined && prefixMessageWithCode ? "".concat(code, ":") : '', message].filter(Boolean).join(' ');
+    _this = _callSuper(this, DynaError, [fullMessage]);
+    _this.isDynaError = true;
+    // Make message enumerable so {...err} and JSON.stringify include it
+    Object.defineProperty(_this, 'message', {
+      value: fullMessage,
+      enumerable: true,
+      writable: true,
+      configurable: true
+    });
+    // Own enumerable property for backward compat with spread/snapshots
+    _this.name = 'Error';
+    _this.date = new Date();
+    if (userMessage !== undefined) {
+      _this.userMessage = userMessage;
+    }
+    if (code !== undefined) {
+      _this.code = code;
+    }
+    if (status !== undefined) {
+      _this.status = status;
+    }
+    if (data !== undefined) {
+      _this.data = data;
+    }
+    if (userData !== undefined) {
+      _this.userData = userData;
+    }
+    if (parentError !== undefined) {
+      _this.parentError = parentError;
+    }
+    if (validationErrors !== undefined) {
+      _this.validationErrors = validationErrors;
+    }
+    if (canRetry !== undefined) {
+      _this.canRetry = canRetry;
+    }
+    if (_applyStackContent) {
+      _this.stack = _applyStackContent;
+    } else if (!stack) {
+      _this.stack = undefined;
+    }
+    return _this;
+  }
+  _inherits(DynaError, _Error);
+  return _createClass(DynaError, [{
+    key: "toJSON",
+    value: function toJSON() {
+      var output = {
+        name: this.name,
+        message: this.message,
+        isDynaError: this.isDynaError,
+        date: this.date
+      };
+      if (this.userMessage !== undefined) {
+        output.userMessage = this.userMessage;
+      }
+      if (this.code !== undefined) {
+        output.code = this.code;
+      }
+      if (this.status !== undefined) {
+        output.status = this.status;
+      }
+      if (this.data !== undefined) {
+        output.data = this.data;
+      }
+      if (this.userData !== undefined) {
+        output.userData = this.userData;
+      }
+      if (this.parentError !== undefined) {
+        output.parentError = this.parentError;
+      }
+      if (this.validationErrors !== undefined) {
+        output.validationErrors = this.validationErrors;
+      }
+      if (this.canRetry !== undefined) {
+        output.canRetry = this.canRetry;
+      }
+      return output;
+    }
+  }]);
+}(/*#__PURE__*/_wrapNativeSuper(Error));
+var dynaError = function dynaError(errorArg) {
+  if (typeof errorArg === 'string') {
+    return new DynaError({
       message: errorArg
     });
   }
   if (errorArg instanceof Error) {
-    return _dynaError({
+    return new DynaError({
       message: errorArg.message,
       _applyStackContent: errorArg.stack
     });
   }
   if (errorArg && (errorArg === null || errorArg === void 0 ? void 0 : errorArg.message)) {
-    return dynaErrorByIDynaError(errorArg);
+    return new DynaError(errorArg);
   }
-  // This is a case of something strage unknown
-  return _dynaError({
-    message: "Unknown nature of error",
+  return new DynaError({
+    message: 'Unknown nature of error',
     parentError: {
       error: errorArg
     }
   });
-};
-
-var dynaErrorByIDynaError = function dynaErrorByIDynaError(_ref) {
-  var message = _ref.message,
-    userMessage = _ref.userMessage,
-    code = _ref.code,
-    status = _ref.status,
-    data = _ref.data,
-    userData = _ref.userData,
-    parentError = _ref.parentError,
-    validationErrors = _ref.validationErrors,
-    _ref$stack = _ref.stack,
-    stack = _ref$stack === void 0 ? true : _ref$stack,
-    _applyStackContent = _ref._applyStackContent,
-    canRetry = _ref.canRetry,
-    _ref$prefixMessageWit = _ref.prefixMessageWithCode,
-    prefixMessageWithCode = _ref$prefixMessageWit === void 0 ? false : _ref$prefixMessageWit;
-  var fullMessage = [code !== undefined && prefixMessageWithCode ? "".concat(code, ":") : '', message].filter(Boolean).join(' ');
-  return removeUndefined({
-    date: new Date(),
-    name: 'Error',
-    code: code,
-    status: status,
-    message: fullMessage,
-    userMessage: userMessage,
-    data: data,
-    userData: userData,
-    parentError: parentError,
-    validationErrors: validationErrors,
-    canRetry: canRetry,
-    stack: _applyStackContent ? _applyStackContent : stack ? new Error(fullMessage).stack : undefined,
-    isDynaError: true
-  });
-};
-var removeUndefined = function removeUndefined(data) {
-  for (var key in data) {
-    if (data[key] === undefined) delete data[key];
-  }
-  return data;
 };
 
 /***/ })
@@ -148,6 +228,7 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   DynaError: () => (/* reexport safe */ _dynaError__WEBPACK_IMPORTED_MODULE_0__.DynaError),
 /* harmony export */   dynaError: () => (/* reexport safe */ _dynaError__WEBPACK_IMPORTED_MODULE_0__.dynaError)
 /* harmony export */ });
 /* harmony import */ var _dynaError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dynaError */ "./src/dynaError.ts");

@@ -1,17 +1,20 @@
 import {
   dynaError,
+  DynaError,
   IDynaError,
 } from "./";
 
 describe('dynaError', () => {
   describe('with error config', () => {
-    it('Minimal use, just with a message', () => {
+    it('Minimal use, dynaError() - just with a message', () => {
       try {
         throw dynaError({message: 'Something is invalid'});
       }
       catch (e) {
         const error = e as IDynaError;
         expect(clearForSnapshot(error)).toMatchSnapshot();
+        expect(error).toBeInstanceOf(Error);
+        expect(error).toBeInstanceOf(DynaError);
         expect(error.stack?.length).toBeGreaterThan(0);
         expect(error.isDynaError).toBe(true);
         expect(error.date?.valueOf()).toBeGreaterThan(0);
@@ -24,6 +27,36 @@ describe('dynaError', () => {
         expect(error.parentError).toBe(undefined);
         expect(error.validationErrors).toBe(undefined);
         expect(error.canRetry).toBe(undefined);
+      }
+    });
+    it('Minimal use, new DynaError() - just with a message', () => {
+      try {
+        throw new DynaError();
+      }
+      catch (e) {
+        const error = e as IDynaError;
+        expect(clearForSnapshot(error)).toMatchSnapshot();
+        expect(error).toBeInstanceOf(Error);
+        expect(error).toBeInstanceOf(DynaError);
+        expect(error.stack?.length).toBeGreaterThan(0);
+        expect(error.isDynaError).toBe(true);
+        expect(error.date?.valueOf()).toBeGreaterThan(0);
+        expect(error.message).toBe('Unknown dyna error');
+      }
+    });
+    it('Minimal use, new DynaError({message}) - just with a message', () => {
+      try {
+        throw new DynaError({message: "Something went wrong"});
+      }
+      catch (e) {
+        const error = e as IDynaError;
+        expect(clearForSnapshot(error)).toMatchSnapshot();
+        expect(error).toBeInstanceOf(Error);
+        expect(error).toBeInstanceOf(DynaError);
+        expect(error.stack?.length).toBeGreaterThan(0);
+        expect(error.isDynaError).toBe(true);
+        expect(error.date?.valueOf()).toBeGreaterThan(0);
+        expect(error.message).toBe('Something went wrong');
       }
     });
     it('Use with all properties', () => {
@@ -83,6 +116,33 @@ describe('dynaError', () => {
   test('From native Error', () => {
     const error = dynaError(new Error("Something went wrong"));
     expect(clearForSnapshot(error)).toMatchSnapshot();
+  });
+
+  test('JSON.stringify round-trip', () => {
+    const error = dynaError({
+      message: 'Something failed',
+      code: 404,
+      status: 500,
+      userMessage: 'Not found',
+      canRetry: true,
+      data: {id: 1},
+      userData: {level: 'basic'},
+      parentError: {message: 'Root cause'},
+      validationErrors: {field: 'Required'},
+    });
+    const parsed = JSON.parse(JSON.stringify(error));
+    expect(parsed.message).toBe('Something failed');
+    expect(parsed.code).toBe(404);
+    expect(parsed.status).toBe(500);
+    expect(parsed.userMessage).toBe('Not found');
+    expect(parsed.canRetry).toBe(true);
+    expect(parsed.data.id).toBe(1);
+    expect(parsed.userData.level).toBe('basic');
+    expect(parsed.parentError.message).toBe('Root cause');
+    expect(parsed.validationErrors.field).toBe('Required');
+    expect(parsed.isDynaError).toBe(true);
+    expect(parsed.name).toBe('Error');
+    expect(parsed.stack).toBeUndefined();
   });
 });
 

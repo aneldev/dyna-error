@@ -65,5 +65,20 @@ export interface IDynaError extends Error {
     validationErrors?: any;
     canRetry?: boolean;
     isDynaError?: true;
+    toJSON(): Record<string, unknown>;
+}
+export declare class DynaError extends Error implements IDynaError {
+    date: Date;
+    userMessage?: string;
+    code?: number;
+    status?: number;
+    data?: any;
+    userData?: any;
+    parentError?: any;
+    validationErrors?: any;
+    canRetry?: boolean;
+    isDynaError: true;
+    constructor({ message, userMessage, code, status, data, userData, parentError, validationErrors, stack, _applyStackContent, canRetry, prefixMessageWithCode, }?: IErrorConfig);
+    toJSON(): Record<string, unknown>;
 }
 export declare const dynaError: (errorArg: string | Error | IErrorConfig | unknown) => IDynaError;

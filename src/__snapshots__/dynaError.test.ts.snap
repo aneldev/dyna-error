@@ -8,10 +8,26 @@ exports[`dynaError From native Error 1`] = `
 }
 `;
 
-exports[`dynaError with error config Minimal use, just with a message 1`] = `
+exports[`dynaError with error config Minimal use, dynaError() - just with a message 1`] = `
 {
   "isDynaError": true,
   "message": "Something is invalid",
+  "name": "Error",
+}
+`;
+
+exports[`dynaError with error config Minimal use, new DynaError() - just with a message 1`] = `
+{
+  "isDynaError": true,
+  "message": "Unknown dyna error",
+  "name": "Error",
+}
+`;
+
+exports[`dynaError with error config Minimal use, new DynaError({message}) - just with a message 1`] = `
+{
+  "isDynaError": true,
+  "message": "Something went wrong",
   "name": "Error",
 }
 `;
