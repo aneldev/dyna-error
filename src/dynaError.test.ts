@@ -118,6 +118,51 @@ describe('dynaError', () => {
     expect(clearForSnapshot(error)).toMatchSnapshot();
   });
 
+  describe('with an IDynaError argument', () => {
+    it('copies all properties of the given IDynaError', () => {
+      const source = dynaError({
+        message: 'Something is invalid',
+        userMessage: 'Please retry',
+        code: 330010,
+        status: 500,
+        canRetry: false,
+        parentError: {message: 'Parent error'},
+        validationErrors: {name: 'Is required'},
+        data: {userId: 230130042},
+        userData: {level: 'basic'},
+      });
+
+      const error = dynaError(source);
+
+      expect(error).toBeInstanceOf(DynaError);
+      expect(error.isDynaError).toBe(true);
+      expect(error.message).toBe(source.message);
+      expect(error.userMessage).toBe('Please retry');
+      expect(error.code).toBe(330010);
+      expect(error.status).toBe(500);
+      expect(error.canRetry).toBe(false);
+      expect(error.parentError).toEqual({message: 'Parent error'});
+      expect(error.validationErrors).toEqual({name: 'Is required'});
+      expect(error.data).toEqual({userId: 230130042});
+      expect(error.userData).toEqual({level: 'basic'});
+      expect(error.date).toEqual(source.date);
+      expect(error.stack).toBe(source.stack);
+    });
+
+    it('does not double-prefix the message with the code', () => {
+      const source = dynaError({
+        message: 'Something is invalid',
+        code: 330010,
+        prefixMessageWithCode: true,
+      });
+      expect(source.message).toBe('330010: Something is invalid');
+
+      const error = dynaError(source);
+      expect(error.message).toBe('330010: Something is invalid');
+      expect(error.code).toBe(330010);
+    });
+  });
+
   test('JSON.stringify round-trip', () => {
     const error = dynaError({
       message: 'Something failed',
