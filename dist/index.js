@@ -147,6 +147,28 @@ var dynaError = function dynaError(errorArg) {
       message: errorArg
     });
   }
+  if (errorArg && errorArg.isDynaError === true) {
+    // Already a DynaError: clone it preserving every property.
+    // The `isDynaError` flag is the stable discriminant set by DynaError.
+    var source = errorArg;
+    var clone = new DynaError({
+      message: source.message,
+      // Already fully composed (incl. any code prefix), so don't re-prefix.
+      userMessage: source.userMessage,
+      code: source.code,
+      status: source.status,
+      data: source.data,
+      userData: source.userData,
+      parentError: source.parentError,
+      validationErrors: source.validationErrors,
+      canRetry: source.canRetry,
+      _applyStackContent: source.stack
+    });
+    if (source.date !== undefined) {
+      clone.date = source.date;
+    }
+    return clone;
+  }
   if (errorArg instanceof Error) {
     return new DynaError({
       message: errorArg.message,
