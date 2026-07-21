@@ -82,3 +82,4 @@ export declare class DynaError extends Error implements IDynaError {
     toJSON(): Record<string, unknown>;
 }
 export declare const dynaError: (errorArg: string | Error | IErrorConfig | unknown) => IDynaError;
+//# sourceMappingURL=dynaError.d.ts.map
