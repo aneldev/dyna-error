@@ -285,3 +285,7 @@ Returns a new object compatible with JS `Error`.
 - `err instanceof Error` → `true`
 - `err instanceof DynaError` → `true` (the `DynaError` class is exported)
 - Added `toJSON()` method for explicit, predictable JSON serialization — `stack` is excluded by default for security
+
+## v6
+
+- Support ESM build at the same time
