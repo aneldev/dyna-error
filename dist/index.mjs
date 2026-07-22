@@ -136,6 +136,9 @@ var dynaError = function dynaError(errorArg) {
     });
   }
   if (errorArg instanceof Error) {
+    if (errorArg.isDynaError) {
+      return errorArg;
+    }
     return new DynaError({
       message: errorArg.message,
       _applyStackContent: errorArg.stack

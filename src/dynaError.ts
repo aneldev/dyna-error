@@ -206,6 +206,9 @@ export const dynaError = (
     return new DynaError({message: errorArg});
   }
   if (errorArg instanceof Error) {
+    if ((errorArg as IDynaError).isDynaError) {
+      return errorArg as IDynaError;
+    }
     return new DynaError({
       message: errorArg.message,
       _applyStackContent: errorArg.stack,

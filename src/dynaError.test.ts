@@ -118,6 +118,36 @@ describe('dynaError', () => {
     expect(clearForSnapshot(error)).toMatchSnapshot();
   });
 
+  test('From an existing dynaError - keeps ALL IDynaError properties', () => {
+    const e: IDynaError = dynaError({
+      message: 'Original failure',
+      userMessage: 'Something went wrong',
+      code: 330020,
+      status: 503,
+      data: {debug: true},
+      userData: {level: 'basic'},
+      parentError: {message: 'Root cause'},
+      validationErrors: {field: 'Required'},
+      canRetry: false,
+    });
+
+    const d2 = dynaError(e);
+
+    expect(d2.isDynaError).toBe(true);
+    expect(d2.message).toBe('Original failure');
+    expect(d2.userMessage).toBe('Something went wrong');
+    expect(d2.code).toBe(330020);
+    expect(d2.status).toBe(503);
+    expect(d2.data).toEqual({debug: true});
+    expect(d2.userData).toEqual({level: 'basic'});
+    expect(d2.parentError).toEqual({message: 'Root cause'});
+    expect(d2.validationErrors).toEqual({field: 'Required'});
+    expect(d2.canRetry).toBe(false);
+    expect(d2.date?.valueOf()).toBeGreaterThan(0);
+    expect(d2.stack?.length).toBeGreaterThan(0);
+    expect(typeof d2.toJSON).toBe('function');
+  });
+
   test('JSON.stringify round-trip', () => {
     const error = dynaError({
       message: 'Something failed',
