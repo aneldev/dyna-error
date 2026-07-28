@@ -36,6 +36,7 @@ var DynaError = /*#__PURE__*/function (_Error) {
       userMessage = _ref.userMessage,
       code = _ref.code,
       status = _ref.status,
+      digest = _ref.digest,
       data = _ref.data,
       userData = _ref.userData,
       parentError = _ref.parentError,
@@ -68,6 +69,9 @@ var DynaError = /*#__PURE__*/function (_Error) {
     }
     if (status !== undefined) {
       _this.status = status;
+    }
+    if (digest !== undefined) {
+      _this.digest = digest;
     }
     if (data !== undefined) {
       _this.data = data;
@@ -110,6 +114,9 @@ var DynaError = /*#__PURE__*/function (_Error) {
       if (this.status !== undefined) {
         output.status = this.status;
       }
+      if (this.digest !== undefined) {
+        output.digest = this.digest;
+      }
       if (this.data !== undefined) {
         output.data = this.data;
       }
@@ -141,6 +148,7 @@ var dynaError = function dynaError(errorArg) {
     }
     return new DynaError({
       message: errorArg.message,
+      digest: errorArg.digest,
       _applyStackContent: errorArg.stack
     });
   }

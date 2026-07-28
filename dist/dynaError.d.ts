@@ -16,6 +16,11 @@ export interface IErrorConfig {
      */
     status?: number;
     /**
+     * Error digest, a hash of the error used to correlate client and server logs
+     * (as produced by Next.js / React server errors).
+     */
+    digest?: string;
+    /**
      * Error data intended for debugging, may contain sensitive information.
      */
     data?: any;
@@ -58,6 +63,7 @@ export interface IDynaError extends Error {
     userMessage?: string;
     code?: number;
     status?: number;
+    digest?: string;
     data?: any;
     userData?: any;
     parentError?: any;
@@ -72,13 +78,14 @@ export declare class DynaError extends Error implements IDynaError {
     userMessage?: string;
     code?: number;
     status?: number;
+    digest?: string;
     data?: any;
     userData?: any;
     parentError?: any;
     validationErrors?: any;
     canRetry?: boolean;
     isDynaError: true;
-    constructor({ message, userMessage, code, status, data, userData, parentError, validationErrors, stack, _applyStackContent, canRetry, prefixMessageWithCode, }?: IErrorConfig);
+    constructor({ message, userMessage, code, status, digest, data, userData, parentError, validationErrors, stack, _applyStackContent, canRetry, prefixMessageWithCode, }?: IErrorConfig);
     toJSON(): Record<string, unknown>;
 }
 export declare const dynaError: (errorArg: string | Error | IErrorConfig | unknown) => IDynaError;

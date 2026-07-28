@@ -66,6 +66,7 @@ describe('dynaError', () => {
           userMessage: 'Please retry',
           code: 330010,
           status: 500,
+          digest: 'digest-123',
           canRetry: false,
           parentError: {message: 'Parent error'},
           validationErrors: {name: 'Is required'},
@@ -86,6 +87,7 @@ describe('dynaError', () => {
         expect(error.userMessage).toBe('Please retry');
         expect(error.code).toBe(330010);
         expect(error.status).toBe(500);
+        expect(error.digest).toBe('digest-123');
         expect(error.canRetry).toBe(false);
         expect(error.data.userId).toBe(230130042);
         expect(error.userData.level).toBe('basic');
@@ -118,12 +120,20 @@ describe('dynaError', () => {
     expect(clearForSnapshot(error)).toMatchSnapshot();
   });
 
+  test('From native Error with digest (Next.js style)', () => {
+    const nativeError = new Error("Something went wrong") as Error & {digest?: string};
+    nativeError.digest = 'digest-abc';
+    const error = dynaError(nativeError);
+    expect(error.digest).toBe('digest-abc');
+  });
+
   test('From an existing dynaError - keeps ALL IDynaError properties', () => {
     const e: IDynaError = dynaError({
       message: 'Original failure',
       userMessage: 'Something went wrong',
       code: 330020,
       status: 503,
+      digest: 'digest-330020',
       data: {debug: true},
       userData: {level: 'basic'},
       parentError: {message: 'Root cause'},
@@ -138,6 +148,7 @@ describe('dynaError', () => {
     expect(d2.userMessage).toBe('Something went wrong');
     expect(d2.code).toBe(330020);
     expect(d2.status).toBe(503);
+    expect(d2.digest).toBe('digest-330020');
     expect(d2.data).toEqual({debug: true});
     expect(d2.userData).toEqual({level: 'basic'});
     expect(d2.parentError).toEqual({message: 'Root cause'});
@@ -153,6 +164,7 @@ describe('dynaError', () => {
       message: 'Something failed',
       code: 404,
       status: 500,
+      digest: 'digest-404',
       userMessage: 'Not found',
       canRetry: true,
       data: {id: 1},
@@ -164,6 +176,7 @@ describe('dynaError', () => {
     expect(parsed.message).toBe('Something failed');
     expect(parsed.code).toBe(404);
     expect(parsed.status).toBe(500);
+    expect(parsed.digest).toBe('digest-404');
     expect(parsed.userMessage).toBe('Not found');
     expect(parsed.canRetry).toBe(true);
     expect(parsed.data.id).toBe(1);

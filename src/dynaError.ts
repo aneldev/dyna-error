@@ -20,6 +20,12 @@ export interface IErrorConfig {
   status?: number;
 
   /**
+   * Error digest, a hash of the error used to correlate client and server logs
+   * (as produced by Next.js / React server errors).
+   */
+  digest?: string;
+
+  /**
    * Error data intended for debugging, may contain sensitive information.
    */
   data?: any;
@@ -71,6 +77,7 @@ export interface IDynaError extends Error {
   userMessage?: string;
   code?: number;
   status?: number;
+  digest?: string;
   data?: any;
   userData?: any;
   parentError?: any;
@@ -86,6 +93,7 @@ export class DynaError extends Error implements IDynaError {
   userMessage?: string;
   code?: number;
   status?: number;
+  digest?: string;
   data?: any;
   userData?: any;
   parentError?: any;
@@ -98,6 +106,7 @@ export class DynaError extends Error implements IDynaError {
     userMessage,
     code,
     status,
+    digest,
     data,
     userData,
     parentError,
@@ -135,6 +144,9 @@ export class DynaError extends Error implements IDynaError {
     }
     if (status !== undefined) {
       this.status = status;
+    }
+    if (digest !== undefined) {
+      this.digest = digest;
     }
     if (data !== undefined) {
       this.data = data;
@@ -176,6 +188,9 @@ export class DynaError extends Error implements IDynaError {
     if (this.status !== undefined) {
       output.status = this.status;
     }
+    if (this.digest !== undefined) {
+      output.digest = this.digest;
+    }
     if (this.data !== undefined) {
       output.data = this.data;
     }
@@ -211,6 +226,7 @@ export const dynaError = (
     }
     return new DynaError({
       message: errorArg.message,
+      digest: (errorArg as {digest?: string}).digest,
       _applyStackContent: errorArg.stack,
     });
   }

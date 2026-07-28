@@ -120,6 +120,12 @@ export interface IErrorConfig {
   status?: number;
 
   /**
+   * Error digest, a hash of the error used to correlate client and server logs
+   * (as produced by Next.js / React server errors).
+   */
+  digest?: string;
+
+  /**
    * Error data intended for debugging, may contain sensitive information.
    */
   data?: any;
@@ -190,6 +196,7 @@ export interface IDynaError extends Error {
   userMessage?: string;
   code?: number;
   status?: number;
+  digest?: string;
   data?: any;
   userData?: any;
   parentError?: any;
